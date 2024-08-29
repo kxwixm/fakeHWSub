@@ -71,6 +71,9 @@ end
 
 class BookInStock
   def initialize(isbn, price)
+    if isbn == '' || price <= 0
+      raise ArgumentError
+    end
     @isbn = isbn
     @price = price
   end
@@ -86,8 +89,15 @@ class BookInStock
   end
 
   def price_as_string
-    result = "$"
-    while @price.
-    if /\A\d*.\d*/.match(price)
+    result = "$" + @price.to_s
+    if @price.is_a?(Integer)
+      result += ".00"
+    # 33.8: length = 4, index = 2; 33.80: length = 5, index = 2.
+    elsif @price.to_s.length - @price.to_s.index('.') == 2
+      result += "0"
+    # Could have another elsif to round decimal down to two points, 
+    # but likely out of scope for assignment instruction.
+    end 
+    return result
   end
 end
